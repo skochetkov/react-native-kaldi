@@ -149,3 +149,15 @@ https://github.com/alphacep/vosk-api/blob/master/android/src/main/java/org/kaldi
 
 In the project, a vosk-android-demo was use as Kaldi wrapper for Android:
 https://github.com/alphacep/vosk-android-demo
+It also provides kaldi-andorid aar (kaldi-android-5.2.aar):
+https://github.com/alphacep/vosk-android-demo/blob/master/aars/kaldi-android-5.2.aar
+
+Kaldi default settings in Vosk:
+
+sample rate: 16,000
+buffer size: sample rate * 0.4F
+AudioRecord(Andorid) settings: 
+  source: VOICE_CALL 
+  channel: CHANNEL_IN_MONO
+  audio format: ENCODING_PCM_16BIT
+  buffer size: default buffer size * 2
