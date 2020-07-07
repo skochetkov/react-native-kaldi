@@ -11,7 +11,7 @@ In first terminal:
 In the second terminal:
 npx react-native run-android --port 9000
 
-==========================================================================================
+====================================================================
 
 If you have any build issues, first delete "build" directory from "android" and build again. Most of the time it fixes all issues.
 
@@ -61,7 +61,9 @@ If you don't see audio permission dialog, make sure that your AndroidManifest.xm
 
 Some good Java code examples:
 https://github.com/JoaoCnh/react-native-android-voice/blob/master/src/main/java/com/wmjmc/reactspeech/VoiceModule.java
+
 https://www.programcreek.com/java-api-examples/?code=jordanbyron/react-native-quick-actions/react-native-quick-actions-master/android/src/main/java/com/reactNativeQuickActions/AppShortcutsModule.java
+
 https://reactnative.dev/docs/native-modules-android.html
 
 
@@ -81,21 +83,23 @@ Callbacks implement Inversion of Control principle which is good for certain sce
 But if we deal with cases which more contolled by backend side, it is better use an event driven mechanism.
 Native modules can signal events to JavaScript without being invoked directly. By using RCTDeviceEventEmitter class which can be obtained from the ReactContext class we can emit events from Java and pass
 as many parameters as we want using WritableMap. Here's a sendEvent method used to trigger events to React Native UI:
-
+```
 private static void sendEvent(String eventName,
                             @Nullable WritableMap params) {
     reactContext
         .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
         .emit(eventName, params);
 }
+```
 
 NativeEventEmitter class is a part of 'react-native' package and is helpful to subscribe to events produced by Native Module. Here's an example of this kind of subscription:
 
+```
 const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
     this.eventListener = eventEmitter.addListener('EventReminder', (event) => {
        console.log(event.eventProperty);
     });
-
+```
 In this example we use addListener method to receive events.
 
 ## React Native UI to Native Module Bridge (JavaScript calls Java)
@@ -140,31 +144,35 @@ The other way to establish React Native UI to Native Module involves using Activ
 
 ## Kaldi Speech Recognizer
 
-We use Vosk as an open source speech recogintion toolkit that uses Kaldi behind the scene:
-https://github.com/alphacep/vosk-api
-Vosk installation instructions, examples and turorial and documentation can be found here:
-https://alphacephei.com/vosk/
+We use Vosk as an open source speech recogintion toolkit that uses (Kaldi behind the scene)[https://github.com/alphacep/vosk-api]
+
+Vosk installation instructions, examples and turorial and documentation (can be found here)[https://alphacephei.com/vosk/]
 
 SpeechRecognizer is a main class to access recognizer function of KaldiRecognizer. After configuration this class starts a listener thread which records the data and recognizes it using VOSK engine. Recognition events are passed to a client using RecognitionListener.
 
-For SpeechRecognizer code refer:
-https://github.com/alphacep/vosk-api/blob/master/android/src/main/java/org/kaldi/SpeechRecognizer.java
+For (SpeechRecognizer code refer)[https://github.com/alphacep/vosk-api/blob/master/android/src/main/java/org/kaldi/SpeechRecognizer.java]
 
 KaldiRecognizer uses JNI (voskJNI) to access Kaldi C++ library (libkaldi_jni.so build). It provides main methods to operate Kaldi such as new instance, accept wave form, new model and final/partial results.
 Another important java class called Assets that provides utility methods to keep asset files to external storage to allow further JNI code access assets from a filesystem.
+
 https://github.com/alphacep/vosk-api/blob/master/android/src/main/java/org/kaldi/Assets.java
 
-In the project, a vosk-android-demo was use as Kaldi wrapper for Android:
-https://github.com/alphacep/vosk-android-demo
-It also provides kaldi-andorid aar (kaldi-android-5.2.aar):
-https://github.com/alphacep/vosk-android-demo/blob/master/aars/kaldi-android-5.2.aar
+In the project, a vosk-android-demo was use as [Kaldi wrapper for Android](https://github.com/alphacep/vosk-android-demo)
+It also provides kaldi-andorid aar [kaldi-android-5.2.aar](https://github.com/alphacep/vosk-android-demo/blob/master/aars/kaldi-android-5.2.aar)
 
 Kaldi default settings in Vosk:
 
-sample rate: 16,000
-buffer size: sample rate * 0.4F
+- sample rate: 16,000
+
+- buffer size: sample rate * 0.4F
+
 AudioRecord(Andorid) settings: 
-  source: VOICE_CALL 
-  channel: CHANNEL_IN_MONO
-  audio format: ENCODING_PCM_16BIT
-  buffer size: default buffer size * 2
+
+ - source: VOICE_CALL 
+  
+ - channel: CHANNEL_IN_MONO
+  
+ - audio format: ENCODING_PCM_16BIT
+  
+ - buffer size: default buffer size * 2
+  
