@@ -127,6 +127,12 @@ The example of using @ReactMethod annotated Java function:
         }
     }
 
+Note, that at the end of function execution there is a call of execute method of SetupTask that finalize initialization process - this is a separeted thread instance using AsyncTask android class which AsyncTask must be subclassed to be used.
+Key methods of SetupTask are (at least doInBackground will override by the subclass):
+doInBackground which is invoked on the background thread immediately. This step is used to perform background computation that can take a long time.
+onPostExecute(Result) that is invoked on the UI thread after the background computation finishes
+
+AsyncTasks should ideally be used for short operations (a few seconds at the most.) If we need to keep threads running for long periods of time, it is highly recommended to use the various APIs provided by the java.util.concurrent package such as Executor, ThreadPoolExecutor and FutureTask.
 
 The other way to establish React Native UI to Native Module involves using ActivityEventListener so you will be listening onActivityResult. To do this, you must extend BaseActivityEventListener or implement ActivityEventListener. The former is preferred as it is more resilient to API changes. Then, you need to register the listener in the module's constructor.
 
