@@ -1,4 +1,4 @@
-
+# React Native Kaldi bridge demo
 
 cd into "android" directory and perform gradle build:
 $ gradle build
@@ -11,7 +11,7 @@ In first terminal:
 In the second terminal:
 npx react-native run-android --port 9000
 
-===========================================================================================================================
+==========================================================================================
 
 If you have any build issues, first delete "build" directory from "android" and build again. Most of the time it fixes all issues.
 
@@ -54,8 +54,8 @@ Here's a sample of Kaldi Event in form of JSON:
 
 
 
+## Troubleshooting
 
-##############################  Troubleshooting  ############################################
 If you don't see audio permission dialog, make sure that your AndroidManifest.xml has this line:
 <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
@@ -67,13 +67,13 @@ https://reactnative.dev/docs/native-modules-android.html
 
 Design aprroaches and decision
 
-##Bridge
+# Bridge
 
 The source code for React Native bridge is located in facebook/react-native repository:
 https://github.com/facebook/react-native/tree/master/ReactAndroid/src
 
 
-#Native Modules to React Native UI Bridge (Java calls JavaScript)
+## Native Modules to React Native UI Bridge (Java calls JavaScript)
 
 There are different ways to pass information from Native Modules to React Native UI. One of the easiest way is to provide callbacks to the JavaScript function calls of Native Module methods.
 Callbacks implement Inversion of Control principle which is good for certain scenarios such as one time native calls.  Native modules can also fulfill a promise (or async/await syntax) that represents asynchronous operations such as method calls similar to callbacks.
@@ -98,7 +98,8 @@ const eventEmitter = new NativeEventEmitter(NativeModules.ToastExample);
 
 In this example we use addListener method to receive events.
 
-#React Native UI to Native Module Bridge (JavaScript calls Java)
+## React Native UI to Native Module Bridge (JavaScript calls Java)
+
 A native module is a Java class that usually extends the ReactContextBaseJavaModule class and implements the functionality required by the JavaScript. We create 
 The specifics of React Native Kaldi PoC is that once we initialize Kaldi Speech Recongrizer we deligate control to Native Module that connects Kaldi to microphone directly and sends Kaldi events to JavaScript outside of main UI thread.
 For this goal we can simply expose Native Module Java methods annotated using @ReactMethod in our KaldiModule.java which will be invoked by JavaScript (for example on button click events). Here we can also use callbacks or promises to pass result back to JavaScript but as discussed in "Java calls JavaScript" section sending information back with emitted events will use established communication model. 
@@ -137,7 +138,7 @@ AsyncTasks should ideally be used for short operations (a few seconds at the mos
 The other way to establish React Native UI to Native Module involves using ActivityEventListener so you will be listening onActivityResult. To do this, you must extend BaseActivityEventListener or implement ActivityEventListener. The former is preferred as it is more resilient to API changes. Then, you need to register the listener in the module's constructor.
 
 
-##Kaldi Speech Recongrizer
+## Kaldi Speech Recognizer
 
 We use Vosk as an open source speech recogintion toolkit that uses Kaldi behind the scene:
 https://github.com/alphacep/vosk-api
