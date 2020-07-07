@@ -1,3 +1,3 @@
 # react-native-kaldi
 
-See android/readme for details
+See android/README.md for details
